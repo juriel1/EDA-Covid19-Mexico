@@ -2,6 +2,8 @@ library(vroom)
 library(readr)
 library(anytime)
 
+setwd("E:/_MyDocuments/Data/EDA-Covid19-Mexico")
+
 ### Objective: To find or not and visualize the relationship between the state origin and its symptoms
 # Objetivo: Encontrar o no y visualizar la relación entre el origen estatal y su sintomatología
 
@@ -23,10 +25,9 @@ library(anytime)
 #múltiplo de 3 en cada año para facilitar su manejo con un menor gasto computacional 
 
 new_csv <- function(i) {
-  n_necessary <- c('NACIONALIDAD','HABLA_LENGUA_INDIG','INDIGENA','TOMA_MUESTRA_LAB','RESULTADO_LAB',
-                   'ORIGEN','MIGRANTE','PAIS_NACIONALIDAD','PAIS_ORIGEN','UCI','ID_REGISTRO','CLASIFICACION_FINAL',
-                   'ENTIDAD_UM','ENTIDAD_NAC','MUNICIPIO_RES','FECHA_SINTOMAS','EMBARAZO',
-                   'DIABETES','INMUSUPR','OBESIDAD','RENAL_CRONICA','TABAQUISMO','OTRO_CASO')
+  n_necessary <- c('HABLA_LENGUA_INDIG','INDIGENA',
+                   'ORIGEN','MIGRANTE','UCI','ID_REGISTRO','CLASIFICACION_FINAL',
+                   'FECHA_SINTOMAS','EMBARAZO')
   
   name        <- paste0('COVID19MEXICO202',as.character(i),'.csv')
   new_name    <- paste0('COVID19MEXICO202',as.character(i),'_PART.csv')
@@ -59,10 +60,10 @@ for (i in 0:3){
 }
 rm(i)
 #-------------------------------------------------------- OR
-new_csv(0)
-new_csv(1)
-new_csv(2)
-new_csv(3)
+######new_csv(0)
+#####new_csv(1)
+#####new_csv(2)
+#####new_csv(3)
 
 ### After analyzing the remaining data and objectifying the objectives that should be achieved so that they were
 ### more coherent together, it was decided to eliminate the following unnecessary attributes
@@ -88,8 +89,30 @@ change_fields <- function(i){
 for (i in 0:3){
   change_fields(i)
 }
+rm(i)
 #-------------------------------------------------------- OR
-change_fields(0)
-change_fields(1)
-change_fields(2)
-change_fields(3)
+#####change_fields(0)
+#####change_fields(1)
+#####change_fields(2)
+#####change_fields(3)
+
+limit_years <- function(i){
+  name        <- paste0('COVID19MEXICO202',as.character(i),'_PART.csv')
+  max_year    <- as.integer(120)
+  df          <- read_csv(name)
+  df$EDAD     <- ifelse(df$EDAD > 120, 120,df$EDAD)
+  df$EDAD     <- ifelse(df$EDAD < 1, 1,df$EDAD)
+  rm(name)
+  rm(max_year)
+  rm(df)
+}
+
+for (i in 0:3){
+  limit_years(i)
+}
+rm(i)
+#-------------------------------------------------------- OR
+#####change_fields(0)
+#####change_fields(1)
+#####change_fields(2)
+#####change_fields(3)
